@@ -1,0 +1,7 @@
+Character Name: clay
+Class: Mage
+Level: 1
+Strength: 5
+Magic: 15
+Health: 16
+Gold: 0
