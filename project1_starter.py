@@ -30,7 +30,6 @@ def calculate_stats(character_class, level):
 
 # FUNCTION: create_character
 def create_character(name, character_class):
-    """Create a new character dictionary.""""
     level = 1
     gold = 0
     valid_classes = ["warrior", "mage", "rogue", "cleric"]
