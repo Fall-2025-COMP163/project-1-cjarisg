@@ -30,19 +30,29 @@ def calculate_stats(character_class, level):
 
 # FUNCTION: create_character
 def create_character(name, character_class):
-    """Create a new character dictionary."""
+    """Create a new character dictionary.""""
     level = 1
     gold = 0
+    valid_classes = ["warrior", "mage", "rogue", "cleric"]
+
+    # Check if the class is valid
+    if character_class.lower() not in valid_classes:
+        print(f"Error: '{character_class}' is not a valid class.")
+        return None
+
+    # Calculate stats
     strength, magic, health = calculate_stats(character_class, level)
+
     character = {
         "name": name,
-        "class": character_class,
+        "class": character_class,  # Keep capitalization as input
         "level": level,
         "strength": strength,
         "magic": magic,
         "health": health,
         "gold": gold,
     }
+
     return character
 
 
