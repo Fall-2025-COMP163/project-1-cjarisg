@@ -1,6 +1,6 @@
 # COMP 163 - Project 1: Character Creator & Chronicles
 # Author: Clayan Ariaga
-# AI assistance used for code explanation and debugging.
+# AI assistance used for debugging.
 # This file implements all required functions for the text-based RPG project.
 
 # FUNCTION: calculate_stats
