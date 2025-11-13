@@ -75,10 +75,14 @@ def load_character(filename):
     character = {}
     with open(filename, "r") as f:
         for line in f:
-            key, value = line.strip().split(": ")
-            if key in ["Level", "Strength", "Magic", "Health", "Gold"]:
-                value = int(value)
-            character[key.split()[-1].lower()] = value
+            if ": " in line:
+                key, value = line.strip().split(": ", 1)
+                key = key.replace("Character ", "").lower()
+                if key in ["level", "strength", "magic", "health", "gold"]:
+                    value = int(value)
+                character[key] = value
+    return character
+
     # Normalize keys to match other functions
     return {
         "name": character.get("name"),
