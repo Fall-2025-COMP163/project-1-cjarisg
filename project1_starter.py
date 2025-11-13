@@ -1,6 +1,6 @@
 # COMP 163 - Project 1: Character Creator & Chronicles
 # Author: Clayan Ariaga
-# AI assistance used for debugging.
+# AI assistance used for code explanation and debugging.
 # This file implements all required functions for the text-based RPG project.
 
 # FUNCTION: calculate_stats
@@ -53,6 +53,7 @@ def create_character(name, character_class):
     }
 
     return character
+
 
 
 # FUNCTION: save_character
@@ -117,6 +118,7 @@ def level_up(character):
     return character
 
 
+
 # MAIN PROGRAM
 if __name__ == "__main__":
     print("Welcome to Character Creator & Chronicles!")
@@ -130,5 +132,3 @@ if __name__ == "__main__":
     save_file = f"{name.lower()}_save.txt"
     save_character(hero, save_file)
     print(f"Character saved to {save_file}.")
-
-
