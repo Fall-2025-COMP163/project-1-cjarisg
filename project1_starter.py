@@ -4,7 +4,6 @@
 # This file implements all required functions for the text-based RPG project.
 
 # FUNCTION: calculate_stats
-
 def calculate_stats(character_class, level):
     """Calculate strength, magic, and health based on class and level."""
     if character_class.lower() == "warrior":
@@ -30,16 +29,15 @@ def calculate_stats(character_class, level):
 
 # FUNCTION: create_character
 def create_character(name, character_class):
+    """Create a character dictionary with initial stats."""
     level = 1
     gold = 0
     valid_classes = ["warrior", "mage", "rogue", "cleric"]
 
-    # Check if the class is valid
     if character_class.lower() not in valid_classes:
         print(f"Error: '{character_class}' is not a valid class.")
         return None
 
-    # Calculate stats
     strength, magic, health = calculate_stats(character_class, level)
 
     character = {
@@ -55,12 +53,11 @@ def create_character(name, character_class):
     return character
 
 
-
 # FUNCTION: save_character
 def save_character(character, filename):
     """Save character information to a text file."""
     with open(filename, "w") as f:
-        f.write(f"Character Name: {character['name']}\n")
+        f.write(f"Name: {character['name']}\n")
         f.write(f"Class: {character['class']}\n")
         f.write(f"Level: {character['level']}\n")
         f.write(f"Strength: {character['strength']}\n")
@@ -75,24 +72,14 @@ def load_character(filename):
     character = {}
     with open(filename, "r") as f:
         for line in f:
-            if ": " in line:
-                key, value = line.strip().split(": ", 1)
-                key = key.replace("Character ", "").lower()
-                if key in ["level", "strength", "magic", "health", "gold"]:
-                    value = int(value)
-                character[key] = value
+            if ": " not in line:
+                continue
+            key, value = line.strip().split(": ", 1)
+            key = key.lower()
+            if key in ["level", "strength", "magic", "health", "gold"]:
+                value = int(value)
+            character[key] = value
     return character
-
-    # Normalize keys to match other functions
-    return {
-        "name": character.get("name"),
-        "class": character.get("class"),
-        "level": character.get("level"),
-        "strength": character.get("strength"),
-        "magic": character.get("magic"),
-        "health": character.get("health"),
-        "gold": character.get("gold"),
-    }
 
 
 # FUNCTION: display_character
@@ -109,7 +96,6 @@ def display_character(character):
     print("==========================\n")
 
 
-
 # FUNCTION: level_up
 def level_up(character):
     """Increase the character's level and recalculate stats."""
@@ -122,7 +108,6 @@ def level_up(character):
     return character
 
 
-
 # MAIN PROGRAM
 if __name__ == "__main__":
     print("Welcome to Character Creator & Chronicles!")
@@ -131,8 +116,9 @@ if __name__ == "__main__":
     char_class = input("Class: ").strip().capitalize()
 
     hero = create_character(name, char_class)
-    display_character(hero)
+    if hero:
+        display_character(hero)
 
-    save_file = f"{name.lower()}_save.txt"
-    save_character(hero, save_file)
-    print(f"Character saved to {save_file}.")
+        save_file = f"{name.lower()}_save.txt"
+        save_character(hero, save_file)
+        print(f"Character saved to {save_file}.")
