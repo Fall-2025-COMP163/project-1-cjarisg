@@ -40,9 +40,9 @@ def create_character(name, character_class):
 
     strength, magic, health = calculate_stats(character_class, level)
 
-    character = {
+    return {
         "name": name,
-        "class": character_class,  # Keep capitalization as input
+        "class": character_class,
         "level": level,
         "strength": strength,
         "magic": magic,
@@ -50,12 +50,10 @@ def create_character(name, character_class):
         "gold": gold,
     }
 
-    return character
-
 
 # FUNCTION: save_character
 def save_character(character, filename):
-    """Save character information to a text file."""
+    """Save character information to a text file in consistent format."""
     with open(filename, "w") as f:
         f.write(f"Name: {character['name']}\n")
         f.write(f"Class: {character['class']}\n")
@@ -70,15 +68,36 @@ def save_character(character, filename):
 def load_character(filename):
     """Load character data from a text file and return as dictionary."""
     character = {}
+    mapping = {
+        "name": "name",
+        "class": "class",
+        "level": "level",
+        "strength": "strength",
+        "magic": "magic",
+        "health": "health",
+        "gold": "gold",
+        "character name": "name"  # safety in case of old save style
+    }
+
     with open(filename, "r") as f:
         for line in f:
             if ": " not in line:
                 continue
             key, value = line.strip().split(": ", 1)
-            key = key.lower()
+            key = key.strip().lower()
+            if key in mapping:
+                key = mapping[key]
             if key in ["level", "strength", "magic", "health", "gold"]:
-                value = int(value)
+                try:
+                    value = int(value)
+                except ValueError:
+                    pass
             character[key] = value
+
+    # ensure all keys exist
+    for k in ["name", "class", "level", "strength", "magic", "health", "gold"]:
+        character.setdefault(k, 0 if k != "name" and k != "class" else "")
+
     return character
 
 
@@ -118,7 +137,6 @@ if __name__ == "__main__":
     hero = create_character(name, char_class)
     if hero:
         display_character(hero)
-
         save_file = f"{name.lower()}_save.txt"
         save_character(hero, save_file)
         print(f"Character saved to {save_file}.")
