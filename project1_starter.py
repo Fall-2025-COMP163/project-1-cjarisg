@@ -3,19 +3,13 @@ COMP 163 - Project 1: Character Creator & Saving/Loading
 Name: Clayan Ariaga
 Date: 11/13/2025
 
-AI Usage: ChatGPT assisted with debugging and formatting to match COMP 163 project specifications.
+AI Usage: ChatGPT assisted with debugging file read/write formatting and project structure.
 """
 
 def calculate_stats(character_class, level):
     """
     Calculates base stats based on class and level
     Returns: tuple of (strength, magic, health)
-
-    Design:
-    - Warriors: High strength, low magic, high health
-    - Mages: Low strength, high magic, medium health  
-    - Rogues: Medium strength, medium magic, low health
-    - Clerics: Medium strength, high magic, high health
     """
     if character_class == "Warrior":
         strength = 10 + (level * 5)
@@ -35,16 +29,13 @@ def calculate_stats(character_class, level):
         health = 95 + (level * 8)
     else:
         strength, magic, health = 5, 5, 50
-    return (strength, magic, health)
+    return strength, magic, health
 
 
 def create_character(name, character_class):
     """
     Creates a new character dictionary with calculated stats
     Returns: dictionary with keys: name, class, level, strength, magic, health, gold
-
-    Example:
-    char = create_character("Aria", "Mage")
     """
     valid_classes = ["Warrior", "Mage", "Rogue", "Cleric"]
     if character_class not in valid_classes:
@@ -52,8 +43,8 @@ def create_character(name, character_class):
         return None
 
     level = 1
-    strength, magic, health = calculate_stats(character_class, level)
     gold = 100
+    strength, magic, health = calculate_stats(character_class, level)
 
     character = {
         "name": name,
@@ -64,38 +55,27 @@ def create_character(name, character_class):
         "health": health,
         "gold": gold
     }
-
     return character
 
 
 def save_character(character, filename):
     """
     Saves character to text file in specific format
-
-    Required file format:
-    Character Name: [name]
-    Class: [class]
-    Level: [level]
-    Strength: [strength]
-    Magic: [magic]
-    Health: [health]
-    Gold: [gold]
     """
-    f = open(filename, "w")
-    f.write(f"Character Name: {character['name']}\n")
-    f.write(f"Class: {character['class']}\n")
-    f.write(f"Level: {character['level']}\n")
-    f.write(f"Strength: {character['strength']}\n")
-    f.write(f"Magic: {character['magic']}\n")
-    f.write(f"Health: {character['health']}\n")
-    f.write(f"Gold: {character['gold']}\n")
-    f.close()
+    file = open(filename, "w")
+    file.write(f"Character Name: {character['name']}\n")
+    file.write(f"Class: {character['class']}\n")
+    file.write(f"Level: {character['level']}\n")
+    file.write(f"Strength: {character['strength']}\n")
+    file.write(f"Magic: {character['magic']}\n")
+    file.write(f"Health: {character['health']}\n")
+    file.write(f"Gold: {character['gold']}\n")
+    file.close()
 
 
 def load_character(filename):
     """
-    Loads character from text file
-    Returns: character dictionary if successful, None if file not found
+    Loads character from text file and returns as dictionary
     """
     f = open(filename, "r")
     lines = f.readlines()
@@ -107,23 +87,22 @@ def load_character(filename):
             key, value = line.strip().split(":", 1)
             data[key.strip()] = value.strip()
 
+    # Convert back into dictionary form
     character = {
-        "name": data.get("Character Name", ""),
-        "class": data.get("Class", ""),
-        "level": int(data.get("Level", 1)),
-        "strength": int(data.get("Strength", 0)),
-        "magic": int(data.get("Magic", 0)),
-        "health": int(data.get("Health", 0)),
-        "gold": int(data.get("Gold", 0))
+        "name": data["Character Name"],
+        "class": data["Class"],
+        "level": int(data["Level"]),
+        "strength": int(data["Strength"]),
+        "magic": int(data["Magic"]),
+        "health": int(data["Health"]),
+        "gold": int(data["Gold"])
     }
-
     return character
 
 
 def display_character(character):
     """
     Prints formatted character sheet
-    Returns: None (prints to console)
     """
     print("=== CHARACTER SHEET ===")
     print(f"Name: {character['name']}")
@@ -139,8 +118,6 @@ def display_character(character):
 def level_up(character):
     """
     Increases character level and recalculates stats
-    Modifies the character dictionary directly
-    Returns: updated character
     """
     character["level"] += 1
     strength, magic, health = calculate_stats(character["class"], character["level"])
@@ -151,17 +128,11 @@ def level_up(character):
     return character
 
 
-# Main program area (optional - for testing your functions)
+# Optional demo block for local testing
 if __name__ == "__main__":
-    print("=== CHARACTER CREATOR ===")
     hero = create_character("Aria", "Mage")
     if hero:
-        display_character(hero)
         save_character(hero, "aria.txt")
-        print("\nCharacter saved successfully!")
-        loaded = load_character("aria.txt")
-        print("\nLoaded character:")
-        display_character(loaded)
-        print("\nAfter leveling up:")
-        level_up(hero)
-        display_character(hero)
+        new_hero = load_character("aria.txt")
+        level_up(new_hero)
+        display_character(new_hero)
