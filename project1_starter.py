@@ -70,26 +70,18 @@ def save_character(character, filename):
 
 
 # FUNCTION: load_character
-import os
-
 def load_character(filename):
     """Load character data from a text file and return as dictionary."""
-    if not os.path.exists(filename):
-        print("Error: Save file not found.")
-        return None
-
     character = {}
     with open(filename, "r") as f:
         for line in f:
-            if ": " not in line:
-                continue
-            key, value = line.strip().split(": ", 1)
-            key = key.replace("Character ", "").strip().lower()
-            if key in ["level", "strength", "magic", "health", "gold"]:
-                value = int(value)
-            character[key] = value
+            if ": " in line:
+                key, value = line.strip().split(": ", 1)
+                key = key.replace("Character ", "").lower()
+                if key in ["level", "strength", "magic", "health", "gold"]:
+                    value = int(value)
+                character[key] = value
     return character
-
 
     # Normalize keys to match other functions
     return {
